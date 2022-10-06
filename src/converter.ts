@@ -8,10 +8,10 @@ type ChildNum = 0 | 2 | 3;
 
 function getChildNum(character: string): ChildNum {
   const re_idc_binary = /[⿰⿱⿴⿵⿶⿷⿸⿹⿺⿻]/g;
-  const re_idc3_trainary = /[⿲⿳]/g;
+  const re_idc_trainary = /[⿲⿳]/g;
 
   if (re_idc_binary.test(character)) return 2;
-  if (re_idc3_trainary.test(character)) return 3;
+  if (re_idc_trainary.test(character)) return 3;
 
   // not idc
   return 0;
