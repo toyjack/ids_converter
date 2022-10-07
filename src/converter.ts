@@ -19,15 +19,15 @@ function getChildNum(character: string): ChildNum {
 
 export function convert(ids: string) {
   const idsStack: string[] = [];
-  const treeStack: TreeStack = [];
+  let treeStack: TreeStack = [];
 
   const arr = Array.from(ids);
   let index = 0;
-  while (index < arr.length) {
+  while (index < arr.length + 1) {
     const currentChar = arr[index];
     const currentChildLen = getChildNum(currentChar);
 
-    if (
+    while (
       treeStack.length > 0 &&
       idsStack.length > 0 &&
       treeStack[treeStack.length - 1].children &&
@@ -38,7 +38,11 @@ export function convert(ids: string) {
       const popedIds = idsStack.pop();
       if (popedTree && popedIds) {
         popedTree.value = popedIds;
-        treeStack[treeStack.length - 1].children?.push(popedTree);
+        if (treeStack.length === 0) {
+          treeStack = [popedTree];
+        } else {
+          treeStack[treeStack.length - 1].children?.push(popedTree);
+        }
       }
     }
 
@@ -46,22 +50,8 @@ export function convert(ids: string) {
       idsStack.push(currentChar);
       treeStack.push({ value: currentChar, children: [] });
     } else {
-      treeStack[treeStack.length - 1].children?.push({ value: currentChar });
-
-      if (
-        treeStack.length > 0 &&
-        idsStack.length > 0 &&
-        treeStack[treeStack.length - 1].children &&
-        treeStack[treeStack.length - 1].children?.length ===
-          getChildNum(idsStack[idsStack.length - 1])
-      ) {
-        const popedTree = treeStack.pop();
-        const popedIds = idsStack.pop();
-        if (popedTree && popedIds) {
-          popedTree.value = popedIds;
-          treeStack[treeStack.length - 1].children?.push(popedTree);
-        }
-      }
+      if (currentChar)
+        treeStack[treeStack.length - 1].children?.push({ value: currentChar });
     }
 
     index++;
